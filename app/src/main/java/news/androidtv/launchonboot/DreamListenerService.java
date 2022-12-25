@@ -1,6 +1,8 @@
 package news.androidtv.launchonboot;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -8,9 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
+import androidx.annotation.Nullable;
 
 /**
  * Created by Nick on 5/11/2017.
@@ -43,16 +46,36 @@ public class DreamListenerService extends Service {
         // Create a foreground service.
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Notification notification;
 
-        Notification notification = new Notification.Builder(this)
-                .setContentTitle(getText(R.string.app_name))
-                .setContentText(getText(R.string.notification_text))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.banner))
-                .setContentIntent(pendingIntent)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .setPriority(Notification.PRIORITY_MIN)
-                .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            String channelId = getString(R.string.app_name);
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription(channelId);
+            notificationChannel.setSound(null, null);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            notification = new Notification.Builder(this,channelId)
+                    .setContentTitle(getText(R.string.app_name))
+                    .setContentText(getText(R.string.notification_text))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.banner))
+                    .setContentIntent(pendingIntent)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setPriority(Notification.PRIORITY_MIN)
+                    .build();
+        } else {
+            notification = new Notification.Builder(this)
+                    .setContentTitle(getText(R.string.app_name))
+                    .setContentText(getText(R.string.notification_text))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.banner))
+                    .setContentIntent(pendingIntent)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setPriority(Notification.PRIORITY_MIN)
+                    .build();
+        }
 
         startForeground(ONGOING_NOTIFICATION_ID, notification);
         Log.d(TAG, "Deploy notification");

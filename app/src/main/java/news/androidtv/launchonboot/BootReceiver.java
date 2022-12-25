@@ -11,8 +11,6 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import news.androidtv.launchonboot.SettingsManager;
-
 /**
  * Created by Nick on 10/23/2016.
  */
@@ -101,6 +99,10 @@ public class BootReceiver extends BroadcastReceiver {
 
     private void startForegroundService() {
         Intent i = new Intent(mContext, DreamListenerService.class);
-        mContext.startService(i);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mContext.startForegroundService(i);
+        } else {
+            mContext.startService(i);
+        }
     }
 }

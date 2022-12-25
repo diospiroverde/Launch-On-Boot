@@ -7,24 +7,27 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ListAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import news.androidtv.launchonboot.SettingsManager;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import static android.view.View.GONE;
 import static news.androidtv.launchonboot.SettingsManagerConstants.ONBOARDING;
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        addOverlay();
     	launcherApplications = getLauncherApps();
         mSettingsManager = new SettingsManager(this);
         if (!mSettingsManager.getBoolean(ONBOARDING)) {
@@ -228,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
     public List<ResolveInfo> getLauncherApps() {
         final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         // Change which category is used based on form factor.
+
         mainIntent.addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER);
         final List<ResolveInfo> installedApplicationstv = getPackageManager().queryIntentActivities(mainIntent, 0);
 
@@ -299,6 +304,17 @@ public class MainActivity extends AppCompatActivity {
     private void startForegroundService() {
         // Ideally only starts once :thinking-emoji:
         Intent i = new Intent(MainActivity.this, DreamListenerService.class);
-        startService(i);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(i);
+        } else {
+            startService(i);
+        }
+    }
+
+    public void addOverlay() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && !Settings.canDrawOverlays(this)) {
+                Intent i = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                startActivityForResult(i, 4711);
+        }
     }
 }

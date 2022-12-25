@@ -1,0 +1,22 @@
+<resources>
+     <string name="app_name">Launch on Boot</string>
+     <string name="credits">Cette application permet aux utilisateurs de configurer une application spécifique à lancer chaque fois que l\'appareil est redémarré.\n\nCréé par l\'Interactive Tv Lab.\nOpen source sur GitHub.</string>
+     <string name="null_intent">Impossible de trouver l\'activité à lancer</string>
+     <string name="onboarding_title_welcome">Bienvenue dans \"Launch on Boot\"</string>
+     <string name="onboarding_description_welcome">Ce petit guide vous aidera à démarrer.</string>
+     <string name="onboarding_title_what">Comment cela fonctionne</string>
+     <string name="onboarding_description_what">Lorsque vous allumez votre appareil, vous pouvez accéder au lanceur ou ouvrir immédiatement l\'application de votre choix.</string>
+     <string name="onboarding_title_tv">Chaînes en direct</string>
+     <string name="onboarding_description_tv">Il peut être configuré pour ouvrir n\'importe quelle application, y compris la lecture immédiate de la télévision en direct</string>
+     <string name="onboarding_title_try">Essayez-le !</string>
+     <string name="onboarding_description_try">C\'est facile de commencer. Et vous pouvez le désactiver à tout moment.</string>
+     <string name="notification_text">En attente d\'événements</string>
+     <string name="switch_wakeup">Lancer lorsque l\'appareil se réveille ?</string>
+     <string name="switch_prefer_lb">Vous préférez l\'activité TV (Leanback) de l\'application ?</string>
+     <string name="switch_enable">Activé</string>
+     <string name="switch_live_channels">Lancer l\'application TV / les chaînes en direct au démarrage ?</string>
+     <string name="button_select_app">Sélectionner une application</string>
+     <string name="button_test">Tester</string>
+     <string name="switch_show_all">Afficher toutes les applications</string>
+     <string name="switch_mute">Mettre l\'appareil en sourdine ?</string>
+</resources>
