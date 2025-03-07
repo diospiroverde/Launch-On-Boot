@@ -1,5 +1,8 @@
 package news.androidtv.launchonboot;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE;
+
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
@@ -45,7 +49,7 @@ public class DreamListenerService extends Service {
         super.onCreate();
         // Create a foreground service.
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
         Notification notification;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -77,7 +81,12 @@ public class DreamListenerService extends Service {
                     .build();
         }
 
-        startForeground(ONGOING_NOTIFICATION_ID, notification);
+        if (Build.VERSION.SDK_INT >= 34) {
+            startForeground(ONGOING_NOTIFICATION_ID, notification, FOREGROUND_SERVICE_TYPE_SHORT_SERVICE);
+        }else {
+            startForeground(ONGOING_NOTIFICATION_ID, notification);
+}
+
         Log.d(TAG, "Deploy notification");
 
         // Register listeners.
