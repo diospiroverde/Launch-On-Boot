@@ -82,15 +82,16 @@ public class BootReceiver extends BroadcastReceiver {
             }
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
+                /*
                 long restartTime = 1000*5;
                 PendingIntent restartIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 if (Build.VERSION.SDK_INT > 28) {
                     mgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + restartTime, restartIntent);
 
-                } else {
+                } else { */
                     context.startActivity(i);
-                }
+            /*    } */
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(context, R.string.null_intent, Toast.LENGTH_SHORT).show();
             }
